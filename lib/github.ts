@@ -53,7 +53,7 @@ const headers: HeadersInit = {
 export async function fetchProfile(): Promise<GitHubProfile> {
   const res = await fetch(`${GITHUB_API}/users/${USERNAME}`, {
     headers,
-    next: { revalidate: 3600 },
+    cache: "no-store",
   });
   if (!res.ok) throw new Error(`GitHub profile fetch failed: ${res.status}`);
   return res.json();
@@ -64,7 +64,7 @@ export async function fetchRepos(): Promise<GitHubRepo[]> {
     `${GITHUB_API}/users/${USERNAME}/repos?sort=updated&per_page=30&type=public`,
     {
       headers,
-      next: { revalidate: 3600 },
+      cache: "no-store",
     }
   );
   if (!res.ok) throw new Error(`GitHub repos fetch failed: ${res.status}`);
@@ -78,7 +78,7 @@ export async function fetchEvents(): Promise<GitHubEvent[]> {
     `${GITHUB_API}/users/${USERNAME}/events/public?per_page=10`,
     {
       headers,
-      next: { revalidate: 1800 },
+      cache: "no-store",
     }
   );
   if (!res.ok) return [];
