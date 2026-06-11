@@ -1,6 +1,9 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { fetchProfile, fetchEvents, timeAgo } from "@/lib/github";
-import type { GitHubEvent } from "@/lib/github";
+import type { GitHubEvent, GitHubProfile } from "@/lib/github";
 
 function eventDescription(event: GitHubEvent): string {
   const repo = event.repo.name.split("/")[1] || event.repo.name;
@@ -38,11 +41,29 @@ function eventIcon(type: string): string {
   }
 }
 
-export default async function GitHubWidget() {
-  const [profile, events] = await Promise.all([
-    fetchProfile().catch(() => null),
-    fetchEvents().catch(() => []),
-  ]);
+export default function GitHubWidget() {
+  const [data, setData] = useState<{ profile: GitHubProfile | null; events: GitHubEvent[] } | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      fetchProfile().catch(() => null),
+      fetchEvents().catch(() => []),
+    ]).then(([profile, events]) => {
+      setData({ profile, events });
+    });
+  }, []);
+
+  if (!data) {
+    return (
+      <section className="github-widget" id="github">
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div className="shimmer" style={{ height: 400, borderRadius: 24 }} />
+        </div>
+      </section>
+    );
+  }
+
+  const { profile, events } = data;
 
   if (!profile) {
     return (

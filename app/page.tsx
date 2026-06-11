@@ -1,50 +1,15 @@
-import { Suspense } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import ProjectsGrid from "@/components/ProjectsGrid";
 import GitHubWidget from "@/components/GitHubWidget";
-
-function ProjectsSkeleton() {
-  return (
-    <section className="section" id="projects">
-      <div className="section-header">
-        <div>
-          <p className="section-title-label">✦ GitHub Projects</p>
-          <h2 className="section-title">Work &amp;<br />Experiments</h2>
-        </div>
-      </div>
-      <div className="projects-grid">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="shimmer" style={{ height: 240, marginBottom: "1.5rem", breakInside: "avoid" }} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function GitHubSkeleton() {
-  return (
-    <section className="github-widget" id="github">
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
-        <div className="shimmer" style={{ height: 400, borderRadius: 24 }} />
-      </div>
-    </section>
-  );
-}
 
 export default function Home() {
   return (
     <>
       <Navigation />
       <Hero />
-
-      <Suspense fallback={<ProjectsSkeleton />}>
-        <ProjectsGrid />
-      </Suspense>
-
-      <Suspense fallback={<GitHubSkeleton />}>
-        <GitHubWidget />
-      </Suspense>
+      <ProjectsGrid />
+      <GitHubWidget />
 
       {/* Footer */}
       <footer className="footer" id="contact">
